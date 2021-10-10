@@ -1,7 +1,7 @@
 Copyright (c) 2021, Yuko Otawara with Reserved Font Name "InGen UI"
 
-- The HackGen generate script (https://github.com/yuru7/HackGen) is licensed under the MIT License.
-- And HackGen Font Software is licensed under the SIL Open Font License v1.1.
+- The InGen UI generate script (https://github.com/yuru7/InGenUI) is licensed under the MIT License.
+- And InGen UI Font Software is licensed under the SIL Open Font License v1.1.
 - Source font softwares are licensed under the
     - SIL Open Font License, Version 1.1
         - Inter : https://github.com/rsms/inter
