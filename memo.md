@@ -25,3 +25,7 @@ vim InGenUI-Regular.ttx
 
 ttx -m merged.ttf InGenUI-Regular.ttx
 ```
+
+## Narrow版
+
+x 方向を0.9倍
