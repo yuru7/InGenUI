@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ttFont sfntVersion="\x00\x01\x00\x00" ttLibVersion="3.44">
+
+  <name>
+    <namerecord nameID="0" platformID="3" platEncID="1" langID="0x409">
+      Copyright (c) 2021, Yuko OTAWARA
+    </namerecord>
+    <namerecord nameID="1" platformID="3" platEncID="1" langID="0x409">
+      InGen UI
+    </namerecord>
+    <namerecord nameID="2" platformID="3" platEncID="1" langID="0x409">
+      Regular
+    </namerecord>
+    <namerecord nameID="3" platformID="3" platEncID="1" langID="0x409">
+      InGenUI-Regular v0.0.1
+    </namerecord>
+    <namerecord nameID="4" platformID="3" platEncID="1" langID="0x409">
+      InGen UI Regular
+    </namerecord>
+    <namerecord nameID="5" platformID="3" platEncID="1" langID="0x409">
+      v0.0.1
+    </namerecord>
+    <namerecord nameID="6" platformID="3" platEncID="1" langID="0x409">
+      InGenUI-Regular
+    </namerecord>
+    <namerecord nameID="7" platformID="3" platEncID="1" langID="0x409">
+      
+    </namerecord>
+    <namerecord nameID="8" platformID="3" platEncID="1" langID="0x409">
+      twr
+    </namerecord>
+    <namerecord nameID="9" platformID="3" platEncID="1" langID="0x409">
+      Yuko OTAWARA
+    </namerecord>
+    <namerecord nameID="11" platformID="3" platEncID="1" langID="0x409">
+      
+    </namerecord>
+    <namerecord nameID="12" platformID="3" platEncID="1" langID="0x409">
+      
+    </namerecord>
+    <namerecord nameID="13" platformID="3" platEncID="1" langID="0x409">
+      This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL
+    </namerecord>
+    <namerecord nameID="14" platformID="3" platEncID="1" langID="0x409">
+      http://scripts.sil.org/OFL
+    </namerecord>
+    <namerecord nameID="256" platformID="3" platEncID="1" langID="0x409">
+      Open digits
+    </namerecord>
+    <namerecord nameID="257" platformID="3" platEncID="1" langID="0x409">
+      Disambiguation
+    </namerecord>
+    <namerecord nameID="258" platformID="3" platEncID="1" langID="0x409">
+      r curves into round neighbors
+    </namerecord>
+    <namerecord nameID="259" platformID="3" platEncID="1" langID="0x409">
+      Disambiguation without slashed zero
+    </namerecord>
+    <namerecord nameID="260" platformID="3" platEncID="1" langID="0x409">
+      Alternate one
+    </namerecord>
+    <namerecord nameID="261" platformID="3" platEncID="1" langID="0x409">
+      Open four
+    </namerecord>
+    <namerecord nameID="262" platformID="3" platEncID="1" langID="0x409">
+      Open six
+    </namerecord>
+    <namerecord nameID="263" platformID="3" platEncID="1" langID="0x409">
+      Open nine
+    </namerecord>
+    <namerecord nameID="264" platformID="3" platEncID="1" langID="0x409">
+      Lower-case L with tail
+    </namerecord>
+    <namerecord nameID="265" platformID="3" platEncID="1" langID="0x409">
+      r with curved tail
+    </namerecord>
+    <namerecord nameID="266" platformID="3" platEncID="1" langID="0x409">
+      Alternate German double s
+    </namerecord>
+    <namerecord nameID="267" platformID="3" platEncID="1" langID="0x409">
+      Upper-case i with serif
+    </namerecord>
+    <namerecord nameID="268" platformID="3" platEncID="1" langID="0x409">
+      Flat-top three
+    </namerecord>
+    <namerecord nameID="269" platformID="3" platEncID="1" langID="0x409">
+      Captital G with spur
+    </namerecord>
+    <namerecord nameID="270" platformID="3" platEncID="1" langID="0x409">
+      Single-storey a
+    </namerecord>
+  </name>
+
+  <OS_2>
+    <!-- The fields 'usFirstCharIndex' and 'usLastCharIndex'
+         will be recalculated by the compiler -->
+    <version value="4"/>
+    <xAvgCharWidth value="1574"/>
+    <usWeightClass value="400"/>
+    <usWidthClass value="5"/>
+    <fsType value="00000000 00001000"/>
+    <ySubscriptXSize value="1830"/>
+    <ySubscriptYSize value="1690"/>
+    <ySubscriptXOffset value="0"/>
+    <ySubscriptYOffset value="211"/>
+    <ySuperscriptXSize value="1830"/>
+    <ySuperscriptYSize value="1690"/>
+    <ySuperscriptXOffset value="0"/>
+    <ySuperscriptYOffset value="986"/>
+    <yStrikeoutSize value="192"/>
+    <yStrikeoutPosition value="922"/>
+    <sFamilyClass value="0"/>
+    <panose>
+      <bFamilyType value="2"/>
+      <bSerifStyle value="0"/>
+      <bWeight value="5"/>
+      <bProportion value="3"/>
+      <bContrast value="0"/>
+      <bStrokeVariation value="0"/>
+      <bArmStyle value="0"/>
+      <bLetterForm value="2"/>
+      <bMidline value="0"/>
+      <bXHeight value="4"/>
+    </panose>
+    <ulUnicodeRange1 value="11100001 00000000 00001010 11111111"/>
+    <ulUnicodeRange2 value="01111010 01000111 11111101 11111111"/>
+    <ulUnicodeRange3 value="00000010 00000000 00000000 00110011"/>
+    <ulUnicodeRange4 value="00000000 00000000 00000000 00000000"/>
+    <achVendID value="twr"/>
+    <fsSelection value="00000000 11000000"/>
+    <usFirstCharIndex value="32"/>
+    <usLastCharIndex value="65535"/>
+    <sTypoAscender value="2728"/>
+    <sTypoDescender value="-680"/>
+    <sTypoLineGap value="253"/>
+    <usWinAscent value="3028"/>
+    <usWinDescent value="902"/>
+    <ulCodePageRange1 value="01100000 00010010 00000001 10111111"/>
+    <ulCodePageRange2 value="11011111 11110111 00000000 00000000"/>
+    <sxHeight value="1536"/>
+    <sCapHeight value="2048"/>
+    <usDefaultChar value="0"/>
+    <usBreakChar value="32"/>
+    <usMaxContext value="12"/>
+  </OS_2>
+
+</ttFont>
