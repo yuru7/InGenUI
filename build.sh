@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-declare -r BUILD_VERSION='0.0.2'
+declare -r BUILD_VERSION='0.1.0'
 
 declare -r BASE_DIR=$(cd $(dirname $0); pwd)
 declare -r SOURCE_DIR="$BASE_DIR/source"
@@ -31,6 +31,11 @@ declare -r BUILD_REGULAR="$BUILD_TMP_DIR/${TTX_NAME_REGULAR%.ttx}.ttf"
 declare -r BUILD_BOLD="$BUILD_TMP_DIR/${TTX_NAME_BOLD%.ttx}.ttf"
 declare -r BUILD_REGULAR_N="$BUILD_TMP_DIR/${TTX_NAME_REGULAR_N%.ttx}.ttf"
 declare -r BUILD_BOLD_N="$BUILD_TMP_DIR/${TTX_NAME_BOLD_N%.ttx}.ttf"
+
+# 処理開始
+rm -rf "$BUILD_TMP_DIR"
+mkdir -p "$BUILD_TMP_DIR/build"
+cd "$BUILD_TMP_DIR"
 
 cat > "$FFSCRIPT" << _EOT_
 #!$FONTFORGE_COMMAND -script
@@ -90,10 +95,6 @@ while (i < SizeOf(input_list))
 endloop
 
 _EOT_
-
-rm -rf "$BUILD_TMP_DIR"
-mkdir -p "$BUILD_TMP_DIR/build"
-cd "$BUILD_TMP_DIR"
 
 fontforge -script "$FFSCRIPT"
 
