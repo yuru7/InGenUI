@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-declare -r BUILD_VERSION='0.2.0'
+declare -r BUILD_VERSION='0.2.1'
 
 declare -r BASE_DIR=$(cd $(dirname $0); pwd)
 declare -r SOURCE_DIR="$BASE_DIR/source"
