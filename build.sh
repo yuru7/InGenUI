@@ -9,8 +9,10 @@ declare -r BUILD_TMP_DIR="$BASE_DIR/build_tmp"
 declare -r BUILD_DIR="$BASE_DIR/build"
 
 declare -r FONTFORGE_COMMAND=$(which fontforge)
+declare -r TTFAUTOHINT_COMMAND='ttfautohint -l 6 -r 45 -a qsq -D latn -W -X 6- -I'
 
-declare -r FFSCRIPT="$BUILD_TMP_DIR/modify_jp_fonts.pe"
+declare -r FFSCRIPT_JP="$BUILD_TMP_DIR/modify_jp_fonts.pe"
+declare -r FFSCRIPT_NUM="$BUILD_TMP_DIR/modify_num_fonts.pe"
 
 declare -r EN_FONT_REGULAR="$SOURCE_DIR/Inter-3.19/Inter Hinted for Windows/Desktop/Inter-Regular.ttf"
 declare -r EN_FONT_BOLD="$SOURCE_DIR/Inter-3.19/Inter Hinted for Windows/Desktop/Inter-Bold.ttf"
@@ -21,6 +23,8 @@ declare -r OUTPUT_JP_FONT_REGULAR="$BUILD_TMP_DIR/jp_regular.ttf"
 declare -r OUTPUT_JP_FONT_BOLD="$BUILD_TMP_DIR/jp_bold.ttf"
 declare -r OUTPUT_JP_FONT_REGULAR_N="$BUILD_TMP_DIR/jp_regular_n.ttf"
 declare -r OUTPUT_JP_FONT_BOLD_N="$BUILD_TMP_DIR/jp_bold_n.ttf"
+declare -r OUTPUT_NUM_FONT_REGULAR="$BUILD_TMP_DIR/num_regular.ttf"
+declare -r OUTPUT_NUM_FONT_BOLD="$BUILD_TMP_DIR/num_bold.ttf"
 
 declare -r TTX_NAME_REGULAR='InGenUI-Regular.ttx'
 declare -r TTX_NAME_BOLD='InGenUI-Bold.ttx'
@@ -37,7 +41,7 @@ rm -rf "$BUILD_TMP_DIR"
 mkdir -p "$BUILD_TMP_DIR/build"
 cd "$BUILD_TMP_DIR"
 
-cat > "$FFSCRIPT" << _EOT_
+cat > "$FFSCRIPT_JP" << _EOT_
 #!$FONTFORGE_COMMAND -script
 
 Print("Generate modified jp fonts")
@@ -96,31 +100,91 @@ endloop
 
 _EOT_
 
-fontforge -script "$FFSCRIPT"
+cat > "$FFSCRIPT_NUM" << _EOT_
+#!$FONTFORGE_COMMAND -script
+
+Print("Generate modified num fonts")
+
+# Set parameters
+input_list = [ \\
+  "$EN_FONT_REGULAR", \\
+  "$EN_FONT_BOLD" \\
+]
+output_list = [ \\
+  "$OUTPUT_NUM_FONT_REGULAR", \\
+  "$OUTPUT_NUM_FONT_BOLD" \\
+]
+
+i = 0
+while (i < SizeOf(input_list))
+  Open(input_list[i])
+
+  Select(0ue071, 0ue07a); Copy()
+  Select(0u0030, 0u0039); Paste(); Scale(93, 100, 0, 0)
+
+  Select(0u0020, 0u007e)
+  SelectInvert()
+  Clear()
+
+  RemoveAllKerns()
+
+  Generate(output_list[i])
+  i++
+endloop
+_EOT_
+
+fontforge -script "$FFSCRIPT_JP"
+fontforge -script "$FFSCRIPT_NUM"
+
+for f in "$OUTPUT_NUM_FONT_REGULAR" "$OUTPUT_NUM_FONT_BOLD"
+do
+  pyftsubset "${f}" --text=0123456789
+done
+
+pyftmerge  ${OUTPUT_NUM_FONT_REGULAR%.ttf}.subset.ttf "$EN_FONT_REGULAR"
+$TTFAUTOHINT_COMMAND merged.ttf hinted_en_regular
+pyftmerge  ${OUTPUT_NUM_FONT_BOLD%.ttf}.subset.ttf "$EN_FONT_BOLD"
+$TTFAUTOHINT_COMMAND merged.ttf hinted_en_bold
 
 pyftsubset "$OUTPUT_JP_FONT_REGULAR" '*' --drop-tables+=vhea --drop-tables+=vmtx
-pyftmerge "$EN_FONT_REGULAR" "${OUTPUT_JP_FONT_REGULAR%.ttf}.subset.ttf"
+pyftmerge hinted_en_regular "${OUTPUT_JP_FONT_REGULAR%.ttf}.subset.ttf"
 sed -e "s/v0.0.1/v$BUILD_VERSION/g" "$SOURCE_DIR/$TTX_NAME_REGULAR" > "$BUILD_TMP_DIR/build/$TTX_NAME_REGULAR"
 ttx -m merged.ttf "$BUILD_TMP_DIR/build/$TTX_NAME_REGULAR"
-rm -f merged.ttf
+rm -f merged.ttf "$BUILD_TMP_DIR/build/$TTX_NAME_REGULAR"
+ttx -t GSUB "$BUILD_TMP_DIR/build/${TTX_NAME_REGULAR%.ttx}.ttf"
+sed -ri 's/.*Substitution in="(zero|one|two|three|four|five|six|seven|eight|nine)".*//g' "$BUILD_TMP_DIR/build/$TTX_NAME_REGULAR"
+ttx -m "$BUILD_TMP_DIR/build/${TTX_NAME_REGULAR%.ttx}.ttf" "$BUILD_TMP_DIR/build/$TTX_NAME_REGULAR"
+mv -f "$BUILD_TMP_DIR/build/${TTX_NAME_REGULAR%.ttx}#1.ttf" "$BUILD_TMP_DIR/build/${TTX_NAME_REGULAR%.ttx}.ttf"
 
 pyftsubset "$OUTPUT_JP_FONT_BOLD" '*' --drop-tables+=vhea --drop-tables+=vmtx
-pyftmerge "$EN_FONT_BOLD" "${OUTPUT_JP_FONT_BOLD%.ttf}.subset.ttf"
+pyftmerge hinted_en_bold "${OUTPUT_JP_FONT_BOLD%.ttf}.subset.ttf"
 sed -e "s/v0.0.1/v$BUILD_VERSION/g" "$SOURCE_DIR/$TTX_NAME_BOLD" > "$BUILD_TMP_DIR/build/$TTX_NAME_BOLD"
 ttx -m merged.ttf "$BUILD_TMP_DIR/build/$TTX_NAME_BOLD"
-rm -f merged.ttf
+rm -f merged.ttf "$BUILD_TMP_DIR/build/$TTX_NAME_BOLD"
+ttx -t GSUB "$BUILD_TMP_DIR/build/${TTX_NAME_BOLD%.ttx}.ttf"
+sed -ri 's/.*Substitution in="(zero|one|two|three|four|five|six|seven|eight|nine)".*//g' "$BUILD_TMP_DIR/build/$TTX_NAME_BOLD"
+ttx -m "$BUILD_TMP_DIR/build/${TTX_NAME_BOLD%.ttx}.ttf" "$BUILD_TMP_DIR/build/$TTX_NAME_BOLD"
+mv -f "$BUILD_TMP_DIR/build/${TTX_NAME_BOLD%.ttx}#1.ttf" "$BUILD_TMP_DIR/build/${TTX_NAME_BOLD%.ttx}.ttf"
 
 pyftsubset "$OUTPUT_JP_FONT_REGULAR_N" '*' --drop-tables+=vhea --drop-tables+=vmtx
-pyftmerge "$EN_FONT_REGULAR" "${OUTPUT_JP_FONT_REGULAR_N%.ttf}.subset.ttf"
+pyftmerge hinted_en_regular "${OUTPUT_JP_FONT_REGULAR_N%.ttf}.subset.ttf"
 sed -e "s/v0.0.1/v$BUILD_VERSION/g" "$SOURCE_DIR/$TTX_NAME_REGULAR_N" > "$BUILD_TMP_DIR/build/$TTX_NAME_REGULAR_N"
 ttx -m merged.ttf "$BUILD_TMP_DIR/build/$TTX_NAME_REGULAR_N"
-rm -f merged.ttf
+rm -f merged.ttf "$BUILD_TMP_DIR/build/$TTX_NAME_REGULAR_N"
+ttx -t GSUB "$BUILD_TMP_DIR/build/${TTX_NAME_REGULAR_N%.ttx}.ttf"
+sed -ri 's/.*Substitution in="(zero|one|two|three|four|five|six|seven|eight|nine)".*//g' "$BUILD_TMP_DIR/build/$TTX_NAME_REGULAR_N"
+ttx -m "$BUILD_TMP_DIR/build/${TTX_NAME_REGULAR_N%.ttx}.ttf" "$BUILD_TMP_DIR/build/$TTX_NAME_REGULAR_N"
+mv -f "$BUILD_TMP_DIR/build/${TTX_NAME_REGULAR_N%.ttx}#1.ttf" "$BUILD_TMP_DIR/build/${TTX_NAME_REGULAR_N%.ttx}.ttf"
 
 pyftsubset "$OUTPUT_JP_FONT_BOLD_N" '*' --drop-tables+=vhea --drop-tables+=vmtx
-pyftmerge "$EN_FONT_BOLD" "${OUTPUT_JP_FONT_BOLD_N%.ttf}.subset.ttf"
+pyftmerge hinted_en_bold "${OUTPUT_JP_FONT_BOLD_N%.ttf}.subset.ttf"
 sed -e "s/v0.0.1/v$BUILD_VERSION/g" "$SOURCE_DIR/$TTX_NAME_BOLD_N" > "$BUILD_TMP_DIR/build/$TTX_NAME_BOLD_N"
 ttx -m merged.ttf "$BUILD_TMP_DIR/build/$TTX_NAME_BOLD_N"
-rm -f merged.ttf
+rm -f merged.ttf "$BUILD_TMP_DIR/build/$TTX_NAME_BOLD_N"
+ttx -t GSUB "$BUILD_TMP_DIR/build/${TTX_NAME_BOLD_N%.ttx}.ttf"
+sed -ri 's/.*Substitution in="(zero|one|two|three|four|five|six|seven|eight|nine)".*//g' "$BUILD_TMP_DIR/build/$TTX_NAME_BOLD_N"
+ttx -m "$BUILD_TMP_DIR/build/${TTX_NAME_BOLD_N%.ttx}.ttf" "$BUILD_TMP_DIR/build/$TTX_NAME_BOLD_N"
+mv -f "$BUILD_TMP_DIR/build/${TTX_NAME_BOLD_N%.ttx}#1.ttf" "$BUILD_TMP_DIR/build/${TTX_NAME_BOLD_N%.ttx}.ttf"
 
 rm -f "$BUILD_TMP_DIR/build"/*.ttx
 rm -rf "$BUILD_DIR"
