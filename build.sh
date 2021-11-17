@@ -9,7 +9,8 @@ declare -r BUILD_TMP_DIR="$BASE_DIR/build_tmp"
 declare -r BUILD_DIR="$BASE_DIR/build"
 
 declare -r FONTFORGE_COMMAND=$(which fontforge)
-declare -r TTFAUTOHINT_COMMAND='ttfautohint -l 6 -r 45 -a qsq -D latn -W -X 6- -I'
+declare -r TTFAUTOHINT_COMMAND_REGULAR="ttfautohint -m $BASE_DIR/hinting_post_process/Regular-ctrl.txt -l 6 -r 45 -a qsq -D latn -W -X 6- -I"
+declare -r TTFAUTOHINT_COMMAND_BOLD="ttfautohint -l 6 -r 45 -a qsq -D latn -W -X 6- -I"
 
 declare -r FFSCRIPT_JP="$BUILD_TMP_DIR/modify_jp_fonts.pe"
 declare -r FFSCRIPT_NUM="$BUILD_TMP_DIR/modify_num_fonts.pe"
@@ -118,15 +119,12 @@ output_list = [ \\
 i = 0
 while (i < SizeOf(input_list))
   Open(input_list[i])
-
+  
   Select(0ue071, 0ue07a); Copy()
-  Select(0u0030, 0u0039); Paste(); Scale(93, 100, 0, 0)
-
-  Select(0u0020, 0u007e)
-  SelectInvert()
-  Clear()
-
-  RemoveAllKerns()
+  Select(0u0030, 0u0039)
+  Paste()
+  Scale(93, 100, 0, 0)
+  RemovePosSub("'kern' Horizontal Kerning in Latin lookup 1 per glyph data 0")
 
   Generate(output_list[i])
   i++
@@ -136,15 +134,8 @@ _EOT_
 fontforge -script "$FFSCRIPT_JP"
 fontforge -script "$FFSCRIPT_NUM"
 
-for f in "$OUTPUT_NUM_FONT_REGULAR" "$OUTPUT_NUM_FONT_BOLD"
-do
-  pyftsubset "${f}" --text=0123456789
-done
-
-pyftmerge  ${OUTPUT_NUM_FONT_REGULAR%.ttf}.subset.ttf "$EN_FONT_REGULAR"
-$TTFAUTOHINT_COMMAND merged.ttf hinted_en_regular
-pyftmerge  ${OUTPUT_NUM_FONT_BOLD%.ttf}.subset.ttf "$EN_FONT_BOLD"
-$TTFAUTOHINT_COMMAND merged.ttf hinted_en_bold
+$TTFAUTOHINT_COMMAND_REGULAR "$OUTPUT_NUM_FONT_REGULAR" hinted_en_regular
+$TTFAUTOHINT_COMMAND_BOLD "$OUTPUT_NUM_FONT_BOLD" hinted_en_bold
 
 pyftsubset "$OUTPUT_JP_FONT_REGULAR" '*' --drop-tables+=vhea --drop-tables+=vmtx
 pyftmerge hinted_en_regular "${OUTPUT_JP_FONT_REGULAR%.ttf}.subset.ttf"

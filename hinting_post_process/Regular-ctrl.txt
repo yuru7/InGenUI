@@ -1,0 +1,5 @@
+# period
+uni002E touch 4-8 y 0.5 @-12
+# colon
+uni003A touch 4-8 y 0.5 @-12
+uni003A touch 12-14,22-23 y -0.4 @-12
